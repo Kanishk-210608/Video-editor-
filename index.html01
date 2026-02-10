@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProCloud Video Editor</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.7/dist/umd/ffmpeg.js"></script>
+    <script src="https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
+</head>
+<body>
+    <div class="editor-shell">
+        <header>
+            <h1>ProCloud Editor</h1>
+            <p>High-speed browser processing (No server storage)</p>
+        </header>
+
+        <main class="main-content">
+            <div class="video-preview">
+                <video id="player" controls poster="https://via.placeholder.com/640x360?text=Upload+Video"></video>
+                <div id="status-overlay">Select a file to begin</div>
+            </div>
+
+            <div class="toolbar">
+                <input type="file" id="uploader" accept="video/*" hidden>
+                <label for="uploader" class="btn primary-btn">📁 Upload Video</label>
+                
+                <div class="action-grid">
+                    <button class="btn action-btn" onclick="processVideo('trim')">✂️ Trim (First 5s)</button>
+                    <button class="btn action-btn" onclick="processVideo('mute')">🔇 Remove Audio</button>
+                    <button class="btn action-btn" onclick="processVideo('gray')">🌑 Grayscale</button>
+                    <button class="btn action-btn" onclick="processVideo('gif')">🖼️ Export as GIF</button>
+                </div>
+
+                <div class="progress-container">
+                    <div id="progress-bar"></div>
+                </div>
+                <p id="message"></p>
+                <a id="download-link" class="btn download-btn" style="display:none;">⬇️ Download Result</a>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+    <script src="coi-serviceworker.js"></script>
+</body>
+</html>
