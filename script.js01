@@ -1,0 +1,58 @@
+const { createFFmpeg, fetchFile } = FFmpeg; // Note: Use the appropriate names for v0.12
+let ffmpeg = null;
+
+const uploader = document.getElementById('uploader');
+const player = document.getElementById('player');
+const message = document.getElementById('message');
+const progressBar = document.getElementById('progress-bar');
+const progressContainer = document.querySelector('.progress-container');
+const downloadLink = document.getElementById('download-link');
+
+uploader.onchange = (e) => {
+    const file = e.target.files[0];
+    player.src = URL.createObjectURL(file);
+    document.getElementById('status-overlay').style.display = 'none';
+};
+
+async function processVideo(action) {
+    const file = uploader.files[0];
+    if (!file) return alert("Please upload a video!");
+
+    if (ffmpeg === null) {
+        ffmpeg = new FFmpeg.FFmpeg();
+        ffmpeg.on('progress', ({ progress }) => {
+            progressBar.style.width = `${progress * 100}%`;
+        });
+        await ffmpeg.load({
+            coreURL: "https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js",
+        });
+    }
+
+    message.innerText = "Processing... stay on this tab.";
+    progressContainer.style.display = 'block';
+    
+    const { name } = file;
+    await ffmpeg.writeFile(name, await FFmpeg.fetchFile(file));
+
+    let command = [];
+    let outputName = 'output.mp4';
+
+    if (action === 'trim') command = ['-i', name, '-t', '5', '-c', 'copy', outputName];
+    if (action === 'mute') command = ['-i', name, '-an', '-vcodec', 'copy', outputName];
+    if (action === 'gray') command = ['-i', name, '-vf', 'format=gray', outputName];
+    if (action === 'gif') {
+        outputName = 'output.gif';
+        command = ['-i', name, '-t', '3', '-vf', 'fps=10,scale=320:-1:flags=lanczos', outputName];
+    }
+
+    await ffmpeg.exec(command);
+    
+    const data = await ffmpeg.readFile(outputName);
+    const type = action === 'gif' ? 'image/gif' : 'video/mp4';
+    const url = URL.createObjectURL(new Blob([data.buffer], { type }));
+
+    downloadLink.href = url;
+    downloadLink.download = outputName;
+    downloadLink.style.display = 'block';
+    message.innerText = "Done! Click below to download.";
+}
