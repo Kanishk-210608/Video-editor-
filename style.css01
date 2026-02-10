@@ -1,0 +1,15 @@
+:root { --bg: #0f172a; --panel: #1e293b; --accent: #38bdf8; --text: #f8fafc; }
+body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding: 20px; }
+.editor-shell { max-width: 900px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 2rem; }
+.video-preview { background: #000; border-radius: 12px; overflow: hidden; position: relative; aspect-ratio: 16/9; margin-bottom: 20px; }
+video { width: 100%; height: 100%; }
+.toolbar { background: var(--panel); padding: 25px; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); }
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+.btn { cursor: pointer; padding: 12px; border: none; border-radius: 6px; font-weight: bold; transition: 0.2s; text-align: center; display: block; }
+.primary-btn { background: var(--accent); color: #000; margin: 0 auto 15px; width: fit-content; }
+.action-btn { background: #334155; color: white; }
+.action-btn:hover { background: #475569; }
+.download-btn { background: #22c55e; color: white; text-decoration: none; margin-top: 15px; }
+.progress-container { background: #334155; height: 8px; border-radius: 4px; overflow: hidden; margin: 10px 0; display: none; }
+#progress-bar { width: 0%; height: 100%; background: var(--accent); transition: width 0.3s; }
